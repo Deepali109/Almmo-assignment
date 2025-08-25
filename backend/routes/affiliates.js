@@ -14,34 +14,35 @@ router.get("/:id/conversions", async (req, res) => {
        ORDER BY conversions.timestamp DESC`,
       [id]
     );
-    res.json(result.rows);
+
+    // Always return array
+    return res.json(result.rows || []);
   } catch (err) {
-    console.error("Error fetching conversions:", err);
-    res
-      .status(500)
-      .json({ status: "error", message: "Failed to fetch conversions" });
+    console.error("DB error fetching conversions:", err.message);
+    // Still return array on error
+    return res.json([]);
   }
 });
 
-// ✅ Get all clicks for a given affiliate
+// ✅ Get all clicks for a given affiliate (grouped by campaign)
 router.get("/:id/clicks", async (req, res) => {
   const { id } = req.params;
   try {
     const result = await pool.query(
-      `SELECT clicks.id, clicks.click_id, clicks.timestamp,
-              COALESCE(campaigns.name, 'Unknown Campaign') AS campaign_name
+      `SELECT clicks.id, clicks.click_id, clicks.timestamp, campaigns.name AS campaign_name
        FROM clicks
-       LEFT JOIN campaigns ON clicks.campaign_id = campaigns.id
+       JOIN campaigns ON clicks.campaign_id = campaigns.id
        WHERE clicks.affiliate_id = $1
        ORDER BY clicks.timestamp DESC`,
       [id]
     );
-    res.json(result.rows);
+
+    // Always return array
+    return res.json(result.rows || []);
   } catch (err) {
-    console.error("Error fetching clicks:", err);
-    res
-      .status(500)
-      .json({ status: "error", message: "Failed to fetch clicks" });
+    console.error("DB error fetching clicks:", err.message);
+    // Still return array on error
+    return res.json([]);
   }
 });
 

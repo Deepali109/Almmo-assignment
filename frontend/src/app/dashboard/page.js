@@ -14,14 +14,20 @@ export default function Dashboard() {
       // Fetch clicks
       fetch(`http://localhost:3001/affiliate/${affiliate_id}/clicks`)
         .then((res) => res.json())
-        .then((data) => setClicks(data))
-        .catch((err) => console.error("Clicks fetch error:", err));
+        .then((data) => setClicks(Array.isArray(data) ? data : []))
+        .catch((err) => {
+          console.error("Clicks fetch error:", err);
+          setClicks([]);
+        });
 
       // Fetch conversions
       fetch(`http://localhost:3001/affiliate/${affiliate_id}/conversions`)
         .then((res) => res.json())
-        .then((data) => setConversions(data))
-        .catch((err) => console.error("Conversions fetch error:", err));
+        .then((data) => setConversions(Array.isArray(data) ? data : []))
+        .catch((err) => {
+          console.error("Conversions fetch error:", err);
+          setConversions([]);
+        });
     }
   }, [affiliate_id]);
 
