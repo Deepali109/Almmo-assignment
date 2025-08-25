@@ -85,7 +85,7 @@ newassignment/
 ### 1. Clone repository
 ```bash
 git clone https://github.com/Deepali109/Almmo-assignment.git
-cd newassignment
+cd Almmo-assignment
 ```
 ### 1. Setup Database (PostgreSQL)
 Login into PostgreSQL:
@@ -179,6 +179,68 @@ GET /affiliate/1/conversions
 GET /affiliate/1/clicks
 ```
 ✅ Returns all Clicks for affiliate 1 with campaign info.
+
+## **🧪 Testing the System (Step by Step)**
+Once backend (http://localhost:3001) and frontend (http://localhost:3000) are running, follow this flow:
+✅ Step 1. Insert Affiliates & Campaigns in DB
+Check your data:
+```bash
+SELECT * FROM affiliates;
+-- Example output:
+-- id | name
+--  1 | Affiliate A
+--  2 | Affiliate B
+
+SELECT * FROM campaigns;
+-- id | name
+--  1 | Campaign 1
+-- 10 | Campaign 10
+```
+So we have:
+
+Affiliate ID = 1
+
+Campaign ID = 10
+
+✅ Step 2. Generate a Click
+Open browser or use Postman:
+```bash
+http://localhost:3001/click?affiliate_id=1&campaign_id=10&click_id=test123
+```
+👉 Expected response:
+{
+  "status": "success",
+  "message": "Click tracked"
+}
+👉 Verify in DB:
+```bash
+SELECT * FROM clicks;
+```
+✅ Step 3. Fire a Postback (Conversion)
+Open browser or Postman:
+```bash
+http://localhost:3001/postback?affiliate_id=1&click_id=test123&amount=75&currency=USD
+```
+👉 Expected response:
+{
+  "status": "success",
+  "message": "Conversion tracked"
+}
+👉 Verify in DB:
+```bash
+SELECT * FROM conversions;
+```
+✅ Step 4. View Affiliate Dashboard
+Go to frontend:
+```bash
+http://localhost:3000/?affiliate_id=1
+```
+Enter Affiliate ID (e.g., 1)
+
+Dashboard will display:
+-Clicks under campaigns
+-Conversions (amount, currency, timestamp)
+
 
 ## 🖥️ Frontend Flow
 
