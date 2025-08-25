@@ -84,7 +84,7 @@ newassignment/
 
 ### 1. Clone repository
 ```bash
-git clone https://github.com/<your-username>/<repo-name>.git
+git clone https://github.com/Deepali109/Almmo-assignment.git
 cd newassignment
 ```
 ### 1. Setup Database (PostgreSQL)
